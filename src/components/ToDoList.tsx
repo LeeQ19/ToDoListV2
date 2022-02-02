@@ -11,6 +11,9 @@ function ToDoList({ text, category, id }: IToDo) {
 
     setToDos((toDos) => {
       const i = toDos.findIndex((toDo) => toDo.id === id);
+      if (name === "-1") {
+        return ([...toDos.slice(0, i), ...toDos.slice(i + 1)]);
+      }
       const newToDo = { text, id, category: +name };
       return ([...toDos.slice(0, i), newToDo, ...toDos.slice(i + 1)]);
     });
@@ -21,33 +24,27 @@ function ToDoList({ text, category, id }: IToDo) {
       key={id.toString()}
       style={{
         fontSize: "1.5rem",
-        display: "grid",
-        gridTemplateColumns: "repeat(2, auto)",
+        display: "flex",
         gap: "20px",
       }}
     >
       <span>{text}</span>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(2, auto)",
-          gridAutoColumns: "auto",
-          gap: "5px",
-        }}
-      >
+      <div style={{ display: "flex", gap: "5px", }}>
         {categories.map((c, i) => {
-          return (i !== category ?
+          return (i !== category && (
             <button
               key={c}
               name={i.toString()}
               onClick={onClick}
               style={{ fontSize: "1.2rem", }}
-            >{c}</button>
-            :
-            null
-          );
-        }
-        )}
+            >
+              {c}
+            </button>
+          ));
+        })}
+        <button name={"-1"} onClick={onClick} style={{ fontSize: "1.2rem" }}>
+          Delete
+        </button>
       </div>
     </li>
   );

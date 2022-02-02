@@ -21,22 +21,24 @@ function Main() {
       justifyContent: "center",
       alignItems: "center",
     }}>
-      <h1 style={{ fontSize: "3rem", fontWeight: "700", }}>To Do List with React</h1>
+      <h1 style={{ fontSize: "3rem", fontWeight: "700", }}>
+        To Do List with React
+      </h1>
       <hr style={{ width: "95vw", marginBottom: "10vh", }} />
       <div style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(2, auto)",
+        display: "flex",
         gap: "20px",
         marginBottom: "5vh",
       }}>
         <select value={category} onInput={onInput} style={{ fontSize: "1.5rem", }}>
           {categories.map((v, i) => {
-            return <option key={v} value={i}>{v}</option>
+            return <option key={v} value={i.toString()}>{v}</option>
           })}
+          <option key="Other" value={"-1"}>Other</option>
         </select>
         <CreateToDo />
       </div>
-      <ul>
+      <ul style={{ display: "flex", flexDirection: "column", gap: "10px", }}>
         {toDos?.map((toDo) => (
           <ToDoList key={toDo.id} {...toDo} />
         ))}

@@ -1,6 +1,10 @@
 import { atom, selector } from "recoil";
+import { recoilPersist } from "recoil-persist";
+
+const { persistAtom } = recoilPersist()
 
 export interface IForm {
+  newCat?: string;
   toDo: string;
 };
 
@@ -18,11 +22,13 @@ export const categoryState = atom<number>({
 export const categoriesState = atom<string[]>({
   key: "categories",
   default: ["To Do", "Doing", "Done"],
+  effects_UNSTABLE: [persistAtom],
 });
 
 export const toDosState = atom<IToDo[]>({
   key: "toDos",
   default: [],
+  effects_UNSTABLE: [persistAtom],
 });
 
 export const toDoSelector = selector({

@@ -9,5 +9,5 @@
 
 + TypeScript
 + React
-+ styled-components
 + Recoil
++ React Hook Form
