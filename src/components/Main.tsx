@@ -1,49 +1,28 @@
 import React from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
+import styled from "styled-components";
 
-import { categoriesState, categoryState, toDoSelector } from "../atoms";
-import CreateToDo from "./CreateToDo";
-import ToDoList from "./ToDoList";
+import { boardId, boardsState } from "./atoms";
+import Board from "./Board";
+
+const Wrapper = styled.div`
+  min-height: 100vh;
+  background: linear-gradient(135deg, #b92b27, #1565c0);
+  padding: 4vh 2vw;
+`;
 
 function Main() {
-  const toDos = useRecoilValue(toDoSelector);
-  const categories = useRecoilValue(categoriesState);
-  const [category, setCategory] = useRecoilState(categoryState);
-
-  const onInput = (event: React.FormEvent<HTMLSelectElement>) => {
-    setCategory(+event.currentTarget.value);
-  };
+  const [boards, setBoards] = useRecoilState(boardsState);
+  const [id, setId] = useRecoilState(boardId);
 
   return (
-    <div style={{
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
-      alignItems: "center",
-    }}>
-      <h1 style={{ fontSize: "3rem", fontWeight: "700", }}>
-        To Do List with React
-      </h1>
-      <hr style={{ width: "95vw", marginBottom: "10vh", }} />
-      <div style={{
-        display: "flex",
-        gap: "20px",
-        marginBottom: "5vh",
-      }}>
-        <select value={category} onInput={onInput} style={{ fontSize: "1.5rem", }}>
-          {categories.map((v, i) => {
-            return <option key={v} value={i.toString()}>{v}</option>
-          })}
-          <option key="Other" value={"-1"}>Other</option>
-        </select>
-        <CreateToDo />
-      </div>
-      <ul style={{ display: "flex", flexDirection: "column", gap: "10px", }}>
-        {toDos?.map((toDo) => (
-          <ToDoList key={toDo.id} {...toDo} />
-        ))}
-      </ul>
-    </div>
+    <Wrapper>
+      <Board
+        id={id}
+        name={boards[id].name}
+        lists={boards[id].lists}
+      />
+    </Wrapper>
   );
 }
 

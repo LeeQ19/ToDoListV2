@@ -6,7 +6,7 @@ export const GlobalStyle = createGlobalStyle`
   a, abbr, acronym, address, big, cite, code,
   del, dfn, em, img, ins, kbd, q, s, samp,
   small, strike, strong, sub, sup, tt, var,
-  b, u, i, center,
+  b, u, i, center, button, input,
   dl, dt, dd, ol, ul, li,
   fieldset, form, label, legend,
   table, caption, tbody, tfoot, thead, tr, th, td,
@@ -47,11 +47,36 @@ export const GlobalStyle = createGlobalStyle`
   * {
     box-sizing: border-box;
   }
+  *::-webkit-scrollbar {
+    width: 16px;
+    background-color: #111;
+  }
+  *::-webkit-scrollbar-corner {
+    background-color: #111;
+  }
+  *::-webkit-scrollbar-track {
+    border-radius: 8px;
+  }
+  *::-webkit-scrollbar-thumb {
+    height: 56px;
+    border-radius: 8px;
+    border: 4px solid transparent;
+    background-clip: content-box;
+    background-color: #333;
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: #888;
+  }
   body {
     font-family: 'Source Sans Pro', sans-serif;
+    color: black;
+    user-select: none;
   }
   a {
     text-decoration: none;
     color: inherit;
+  }
+  *:focus {
+    outline: none;
   }
 `;
