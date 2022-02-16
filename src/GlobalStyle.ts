@@ -6,9 +6,9 @@ export const GlobalStyle = createGlobalStyle`
   a, abbr, acronym, address, big, cite, code,
   del, dfn, em, img, ins, kbd, q, s, samp,
   small, strike, strong, sub, sup, tt, var,
-  b, u, i, center, button, input,
+  b, u, i, center, button, input, select, option,
   dl, dt, dd, ol, ul, li,
-  fieldset, form, label, legend,
+  fieldset, form, label, legend, textarea,
   table, caption, tbody, tfoot, thead, tr, th, td,
   article, aside, canvas, details, embed, 
   figure, figcaption, footer, header, hgroup, 
@@ -75,6 +75,9 @@ export const GlobalStyle = createGlobalStyle`
   a {
     text-decoration: none;
     color: inherit;
+  }
+  svg {
+    display: block;
   }
   *:focus {
     outline: none;
