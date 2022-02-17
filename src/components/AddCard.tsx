@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
-  border-radius: 0.2vw;
+  border-radius: 0.2vmax;
   font-size: 1.2rem;
   font-weight: 600;
 `;
@@ -11,45 +11,51 @@ const Deactivated = styled.div`
   color: #333;
   display: flex;
   align-items: center;
-  gap: 0.4vw;
-  border-radius: 0.2vw;
-  padding: 0.4vw 0.8vw;
+  gap: 0.4vmax;
+  border-radius: 0.2vmax;
+  padding: 0.4vmax 0.8vmax;
   cursor: pointer;
-  &:hover {
-    background-color: #fff4;
-  }
   svg {
     height: 0.8rem;
     fill: #333;
+  }
+  &:hover {
+    background-color: #fff4;
+    color: #000;
+    svg {
+      fill: #000;
+    }
   }
 `;
 
 const Activated = styled.form`
   display: flex;
   flex-direction: column;
-  gap: 0.6vw;
+  gap: 0.6vmax;
 `;
 
 const Input = styled.textarea.attrs({
   name: "card",
-  placeholder: "Text for card...",
+  placeholder: "Text for card",
+  autoFocus: true,
 })`
   background-color: #fffb;
-  border-radius: 0.2vw;
-  padding: 0.4vw 0.8vw;
-  padding-bottom: 2vw;
+  border-radius: 0.2vmax;
+  padding: 0.4vmax 0.8vmax;
+  resize: vertical;
+  cursor: auto;
 `;
 
 const BtnWrapper = styled.div`
   display: flex;
   align-items: center;
-  gap: 1vw;
+  gap: 1vmax;
 `;
 
 const AddBtn = styled.button.attrs({ type: "submit" })`
   background-color: #fffb;
-  padding: 0.4vw 0.8vw;
-  border-radius: 0.2vw;
+  padding: 0.4vmax 0.8vmax;
+  border-radius: 0.2vmax;
   cursor: pointer;
   &:hover {
     background-color: #fff8;
@@ -68,7 +74,7 @@ const CloseBtn = styled.button.attrs({ type: "reset" })`
   }
 `;
 
-function AddCard() {
+function AddCard({ addCard }: { addCard: (text: string) => void }) {
   const [isActivate, setIsActivate] = useState(false);
   const [form, setForm] = useState("");
 
@@ -76,7 +82,7 @@ function AddCard() {
     e.preventDefault();
     setIsActivate(false);
     if (form === "") return;
-    console.log(form);
+    addCard(form);
     setForm("");
   };
 

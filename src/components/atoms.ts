@@ -14,19 +14,19 @@ export const boardsState = atom<IBoard[]>({
       {
         id: 0,
         name: "To Do",
-        cards: [{id: 0, text: "first to do"}, {id: 1, text: "second to do"}],
+        cards: [{id: 0, text: "first to do"}]
       },
       {
         id: 1,
         name: "Doing",
-        cards: [{id: 0, text: "first doing"}],
+        cards: []
       },
       {
         id: 2,
         name: "Done",
-        cards: [{id: 0, text: "last done"}],
+        cards: []
       },
-    ],
+    ]
   }],
   effects_UNSTABLE: [persistAtom],
 });

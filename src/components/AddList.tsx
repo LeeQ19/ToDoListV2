@@ -1,22 +1,23 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
   width: 15vw;
   min-width: 250px;
+  flex-shrink: 0;
   background-color: #fff4;
   box-shadow: 0 2px 3px #0002, 0 10px 20px #0001;
-  border-radius: 0.2vw;
+  border-radius: 0.2vmax;
   font-size: 1.5rem;
   font-weight: 600;
-  padding: 0.6vw;
+  padding: 0.6vmax;
 `;
 
 const Deactivated = styled.div`
   color: #333;
   display: flex;
   align-items: center;
-  gap: 0.4vw;
+  gap: 0.4vmax;
   cursor: pointer;
   svg {
     height: 1rem;
@@ -34,32 +35,33 @@ const Activated = styled.form`
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  gap: 0.6vw;
+  gap: 0.6vmax;
 `;
 
 const Input = styled.input.attrs({
   type: "text",
   name: "list",
-  placeholder: "List name...",
+  placeholder: "List name",
   autoComplete: "off",
+  autoFocus: true,
 })`
   width: 100%;
   background-color: #fffb;
-  border-radius: 0.2vw;
-  padding: calc(0.4vw - 4px) 0.8vw;
+  border-radius: 0.2vmax;
+  padding: calc(0.4vmax - 4px) 0.8vmax;
 `;
 
 const BtnWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 0.5vw;
+  gap: 0.5vmax;
 `;
 
 const AddBtn = styled.button.attrs({ type: "submit" })`
   background-color: #fffb;
-  padding: 0.4vw 0.8vw;
-  border-radius: 0.2vw;
+  padding: 0.4vmax 0.8vmax;
+  border-radius: 0.2vmax;
   cursor: pointer;
   &:hover {
     background-color: #fff8;
@@ -78,7 +80,7 @@ const CloseBtn = styled.button.attrs({ type: "reset" })`
   }
 `;
 
-function AddList() {
+function AddList({ addList }: { addList: (name: string) => void }) {
   const [isActivate, setIsActivate] = useState(false);
   const [form, setForm] = useState("");
 
@@ -86,7 +88,7 @@ function AddList() {
     e.preventDefault();
     setIsActivate(false);
     if (form === "") return;
-    console.log(form);
+    addList(form);
     setForm("");
   };
 

@@ -1,32 +1,37 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 
 import { boardId, boardsState } from "./atoms";
+import { IBoard } from "./interface";
 import Board from "./Board";
+import Modal from "./Modal";
 
 const Wrapper = styled.div`
+  width: min-content;
+  min-width: 100%;
   min-height: 100vh;
   background: linear-gradient(135deg, #b92b27, #1565c0);
   display: flex;
   flex-direction: column;
-  gap: 1vw;
+  gap: 1vmax;
   padding: 4vh 2vw;
 `;
 
 const Header = styled.div`
+  width: 100%;
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  gap: 1vw;
+  gap: 1vmax;
   font-size: 1.8rem;
   font-weight: 600;
 `;
 
 const SelectBox = styled.select`
-  border-radius: 0.2vw;
+  border-radius: 0.2vmax;
   box-shadow: 0 2px 3px #0002, 0 10px 20px #0001;
-  padding: 0.4vw 1.6vw 0.4vw 0.8vw;
+  padding: 0.4vmax 1.6vmax 0.4vmax 0.8vmax;
   cursor: pointer;
   &:hover {
     background-color: #fffb;
@@ -40,14 +45,15 @@ const SelectBox = styled.select`
 
 const TitleWrapper = styled.div`
   display: flex;
-  gap: 1vw;
+  gap: 1vmax;
 `;
 
 const TitleBox = styled.div`
+  max-width: 75vw;
   background-color: #fff4;
   box-shadow: 0 2px 3px #0002, 0 10px 20px #0001;
-  border-radius: 0.2vw;
-  padding: 0.4vw 0.8vw;
+  border-radius: 0.2vmax;
+  padding: 0.4vmax 0.8vmax;
   display: flex;
   align-items: center;
   cursor: pointer;
@@ -58,8 +64,6 @@ const TitleBox = styled.div`
 
 const DeleteBtn = styled.button`
   background-color: transparent;
-  margin: 0;
-  padding: 0;
   cursor: pointer;
   svg {
     width: 1.5rem;
@@ -71,35 +75,35 @@ const DeleteBtn = styled.button`
 `;
 
 const TitleForm = styled.form`
-  max-height: inherit;
   display: flex;
   align-items: center;
-  gap: 0.6vw;
+  gap: 0.6vmax;
 `;
 
 const Input = styled.input.attrs({
   type: "text",
   name: "board",
-  placeholder: "Board name...",
+  placeholder: "Board name",
   autoComplete: "off",
   autoFocus: true,
 })`
+  max-width: 75vw;
   background-color: #fffb;
   box-shadow: 0 2px 3px #0002, 0 10px 20px #0001;
-  border-radius: 0.2vw;
-  padding: calc(0.4vw - 4px) 0.8vw;
+  border-radius: 0.2vmax;
+  padding: calc(0.4vmax - 4px) 0.8vmax;
 `;
 
 const BtnWrapper = styled.div`
   display: flex;
-  gap: 0.6vw;
+  gap: 0.6vmax;
 `;
 
 const EditBtn = styled.button.attrs({ type: "submit" })`
   background-color: #fffb;
   box-shadow: 0 2px 3px #0002, 0 10px 20px #0001;
-  border-radius: 0.2vw;
-  padding: 0.4vw 0.8vw;
+  border-radius: 0.2vmax;
+  padding: 0.4vmax 0.8vmax;
   cursor: pointer;
   &:hover {
     background-color: #fff8;
@@ -121,24 +125,64 @@ const CloseBtn = styled.button.attrs({ type: "reset" })`
 function Main() {
   const [boards, setBoards] = useRecoilState(boardsState);
   const [id, setId] = useRecoilState(boardId);
+  const [form, setForm] = useState("");
+  const [isAdd, setIsAdd] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
-  const [form, setForm] = useState(boards[id].name);
+  const [openModal, setOpenModal] = useState(false);
 
-  const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (e.target.value === "") return;
-    console.log(e.target.value);
+  const editBoard = (board: IBoard) => {
+    setBoards(v => v.map(w => w.id === id ? board : w));
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const clickAdd = () => {
+    setForm("");
+    setIsAdd(true);
+  };
+
+  const clickTitle = () => {
+    setForm(boards[id].name);
+    setIsEdit(true);
+  };
+
+  const clickDelete = () => {
+    if (boards.length === 1) return;
+    setOpenModal(true);
+  };
+
+  const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    if (e.target.value === "-1") {
+      clickAdd();
+    } else {
+      setId(parseInt(e.target.value));
+    }
+  };
+
+  const handleAdd = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setIsAdd(false);
+    if (form === "") return;
+    const prevLength = boards.length;
+    setBoards(v => [...v, { id: v.length, name: form, lists: [] }]);
+    setId(prevLength);
+  };
+
+  const handleEdit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsEdit(false);
     if (form === "") return;
-    console.log(form);
-    setForm("");
+    setBoards(v => v.map(w => w.id === id ? { id: w.id, name: form, lists: w.lists } : w));
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm(e.target.value);
+  };
+
+  const handleDelete = (confirm: boolean) => {
+    setOpenModal(false);
+    if (!confirm) return;
+    const prevId = id;
+    setId(v => v < boards.length - 1 ? v : v - 1);
+    setBoards(v => v.filter(w => w.id !== prevId));
   };
 
   return (
@@ -148,15 +192,30 @@ function Main() {
           <option value="" disabled hidden>
             Board
           </option>
+          <option value="-1">
+            + New
+          </option>
           {boards.map((v) => (
             <option key={v.id} value={v.id}>
               {v.name}
             </option>
           ))}
         </SelectBox>
-        {isEdit ? (
-          <TitleForm onSubmit={handleSubmit}>
-            <Input onChange={handleChange} value={form} size={boards[id].name.length} />
+        {isAdd ? (
+          <TitleForm onSubmit={handleAdd}>
+            <Input onChange={handleChange} value={form} size={form.length} />
+            <BtnWrapper>
+              <EditBtn>Add</EditBtn>
+              <CloseBtn onClick={() => setIsAdd(false)}>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000">
+                  <path d="M638.6,500l322.7-322.7c38.3-38.3,38.3-100.3,0-138.6C923,0.4,861,0.4,822.7,38.7L500,361.4L177.3,38.7C139,0.4,77,0.4,38.7,38.7C0.4,77,0.4,139,38.7,177.3L361.4,500L38.7,822.7C0.4,861,0.4,923,38.7,961.3C57.9,980.4,82.9,990,108,990s50.1-9.6,69.3-28.7L500,638.6l322.7,322.7c19.1,19.1,44.2,28.7,69.3,28.7c25.1,0,50.1-9.6,69.3-28.7c38.3-38.3,38.3-100.3,0-138.6L638.6,500z" />
+                </svg>
+              </CloseBtn>
+            </BtnWrapper>
+          </TitleForm>
+        ) : (isEdit ? (
+          <TitleForm onSubmit={handleEdit}>
+            <Input onChange={handleChange} value={form} size={form.length} onFocus={e => e.currentTarget.select()} />
             <BtnWrapper>
               <EditBtn>Edit</EditBtn>
               <CloseBtn onClick={() => setIsEdit(false)}>
@@ -168,10 +227,10 @@ function Main() {
           </TitleForm>
         ) : (
           <TitleWrapper>
-            <TitleBox onClick={() => setIsEdit(true)}>
+            <TitleBox onClick={clickTitle}>
               {boards[id].name}
             </TitleBox>
-            <DeleteBtn>
+            <DeleteBtn onClick={clickDelete}>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 430 512">
                 <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)">
                   <path d="M1590 5100 c-233 -42 -400 -241 -400 -476 l0 -61 -37 -7 c-21 -3 -230 -6 -464 -6 -364 0 -432 -2 -473 -16 -67 -23 -147 -100 -180 -173 -26 -59 -26 -61 -24 -268 l3 -208 2132 -3 2133 -2 0 212 0 213 -29 60 c-34 73 -111 146 -178 169 -40 14 -108 16 -457 16 -226 0 -435 3 -463 6 l-53 7 0 61 c0 233 -173 439 -400 475 -76 13 -1041 13 -1110 1z m1094 -319 c67 -26 96 -76 96 -165 l0 -65 -637 2 -638 2 2 62 c3 88 36 141 103 166 26 10 1047 8 1074 -2z" />
@@ -180,13 +239,24 @@ function Main() {
               </svg>
             </DeleteBtn>
           </TitleWrapper>
-        )}
+        ))}
       </Header>
-      <Board
-        id={id}
-        name={boards[id].name}
-        lists={boards[id].lists}
-      />
+      {!isAdd &&
+        <Board
+          id={id}
+          name={boards[id].name}
+          lists={boards[id].lists}
+          editBoard={editBoard}
+        />
+      }
+      {openModal && (
+        <Modal
+          type="delete"
+          cat="Board"
+          name={boards[id].name}
+          action={handleDelete}
+        />
+      )}
     </Wrapper>
   );
 }

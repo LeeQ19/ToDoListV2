@@ -14,3 +14,10 @@ export interface IBoard {
   name: string;
   lists: IList[];
 };
+
+export interface IModal {
+  type: string;
+  cat: string;
+  name?: string;
+  action: (confirm: boolean) => void;
+};
