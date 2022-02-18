@@ -22,13 +22,14 @@ const Header = styled.div`
   width: 100%;
   display: flex;
   justify-content: flex-start;
-  align-items: center;
+  align-items: flex-start;
   gap: 1vmax;
-  font-size: 1.8rem;
+  font-size: 1.2vmax;
   font-weight: 600;
 `;
 
 const SelectBox = styled.select`
+  max-width: 50vw;
   border-radius: 0.2vmax;
   box-shadow: 0 2px 3px #0002, 0 10px 20px #0001;
   padding: 0.4vmax 1.6vmax 0.4vmax 0.8vmax;
@@ -41,21 +42,26 @@ const SelectBox = styled.select`
 	appearance: none;
   background: #fff4 url('data:image/svg+xml;utf8,<svg viewBox="0 0 1280 640" width="15" xmlns="http://www.w3.org/2000/svg"><path d="M10 6392 c0 -4 1438 -1445 3195 -3202 l3195 -3194 3195 3194 c1757 1757 3195 3198 3195 3202 0 5 -2875 8 -6390 8 -3515 0 -6390 -3 -6390 -8z" transform="translate(0.000000,640.000000) scale(0.100000,-0.100000)" /></svg>') no-repeat;
   background-position: right 0.6vw center;
+  option {
+    max-width: 50vw;
+  }
 `;
 
 const TitleWrapper = styled.div`
   display: flex;
+  align-items: flex-start;
   gap: 1vmax;
 `;
 
 const TitleBox = styled.div`
-  max-width: 75vw;
+  max-width: 40vw;
+  max-height: 3vw;
   background-color: #fff4;
   box-shadow: 0 2px 3px #0002, 0 10px 20px #0001;
   border-radius: 0.2vmax;
   padding: 0.4vmax 0.8vmax;
-  display: flex;
-  align-items: center;
+  word-wrap: break-word;
+  overflow: hidden;
   cursor: pointer;
   &:hover {
     background-color: #fffb;
@@ -64,9 +70,10 @@ const TitleBox = styled.div`
 
 const DeleteBtn = styled.button`
   background-color: transparent;
+  padding: 0.4vmax 0;
   cursor: pointer;
   svg {
-    width: 1.5rem;
+    height: 1.2vmax;
     fill: #333;
   }
   svg:hover {
@@ -87,7 +94,7 @@ const Input = styled.input.attrs({
   autoComplete: "off",
   autoFocus: true,
 })`
-  max-width: 75vw;
+  max-width: 40vw;
   background-color: #fffb;
   box-shadow: 0 2px 3px #0002, 0 10px 20px #0001;
   border-radius: 0.2vmax;
@@ -114,7 +121,7 @@ const CloseBtn = styled.button.attrs({ type: "reset" })`
   background-color: transparent;
   cursor: pointer;
   svg {
-    width: 1.5rem;
+    height: 1.2vmax;
     fill: #333;
   }
   svg:hover {
@@ -173,10 +180,6 @@ function Main() {
     setBoards(v => v.map(w => w.id === id ? { id: w.id, name: form, lists: w.lists } : w));
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm(e.target.value);
-  };
-
   const handleDelete = (confirm: boolean) => {
     setOpenModal(false);
     if (!confirm) return;
@@ -203,9 +206,18 @@ function Main() {
         </SelectBox>
         {isAdd ? (
           <TitleForm onSubmit={handleAdd}>
-            <Input onChange={handleChange} value={form} size={form.length} />
+            <Input
+              value={form}
+              size={form.length + 1}
+              onChange={e => setForm(e.target.value)}
+              onBlur={() => setIsAdd(false)}
+            />
             <BtnWrapper>
-              <EditBtn>Add</EditBtn>
+              <EditBtn
+                onMouseDown={e => e.preventDefault()}
+              >
+                Add
+              </EditBtn>
               <CloseBtn onClick={() => setIsAdd(false)}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000">
                   <path d="M638.6,500l322.7-322.7c38.3-38.3,38.3-100.3,0-138.6C923,0.4,861,0.4,822.7,38.7L500,361.4L177.3,38.7C139,0.4,77,0.4,38.7,38.7C0.4,77,0.4,139,38.7,177.3L361.4,500L38.7,822.7C0.4,861,0.4,923,38.7,961.3C57.9,980.4,82.9,990,108,990s50.1-9.6,69.3-28.7L500,638.6l322.7,322.7c19.1,19.1,44.2,28.7,69.3,28.7c25.1,0,50.1-9.6,69.3-28.7c38.3-38.3,38.3-100.3,0-138.6L638.6,500z" />
@@ -215,9 +227,19 @@ function Main() {
           </TitleForm>
         ) : (isEdit ? (
           <TitleForm onSubmit={handleEdit}>
-            <Input onChange={handleChange} value={form} size={form.length} onFocus={e => e.currentTarget.select()} />
+            <Input
+              value={form}
+              size={form.length + 1}
+              onChange={e => setForm(e.target.value)}
+              onFocus={e => e.currentTarget.select()}
+              onBlur={() => setIsEdit(false)}
+            />
             <BtnWrapper>
-              <EditBtn>Edit</EditBtn>
+              <EditBtn
+                onMouseDown={e => e.preventDefault()}
+              >
+                Edit
+              </EditBtn>
               <CloseBtn onClick={() => setIsEdit(false)}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000">
                   <path d="M638.6,500l322.7-322.7c38.3-38.3,38.3-100.3,0-138.6C923,0.4,861,0.4,822.7,38.7L500,361.4L177.3,38.7C139,0.4,77,0.4,38.7,38.7C0.4,77,0.4,139,38.7,177.3L361.4,500L38.7,822.7C0.4,861,0.4,923,38.7,961.3C57.9,980.4,82.9,990,108,990s50.1-9.6,69.3-28.7L500,638.6l322.7,322.7c19.1,19.1,44.2,28.7,69.3,28.7c25.1,0,50.1-9.6,69.3-28.7c38.3-38.3,38.3-100.3,0-138.6L638.6,500z" />

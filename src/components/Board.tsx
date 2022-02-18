@@ -14,6 +14,7 @@ const Wrapper = styled.div`
 `;
 
 function Board({ id, name, lists, editBoard }: IBoard & { editBoard: (board: IBoard)=> void }) {
+  console.log(`Board, ${id}, ${name}, ${lists.length}`);
   const [currLists, setCurrLists] = useState(lists);
 
   useEffect(() => {

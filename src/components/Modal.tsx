@@ -31,16 +31,16 @@ const Wrapper = styled.div`
 `;
 
 const IconWrapper = styled.div`
-  width: 6rem;
-  height: 6rem;
+  width: 4vmax;
+  height: 4vmax;
   border-radius: 50%;
   background-color: #bbb;
   display: flex;
   justify-content: center;
   align-items: center;
   svg {
-    width: 4rem;
-    height: 4rem;
+    width: 3vmax;
+    height: 3vmax;
   }
 `;
 
@@ -52,12 +52,12 @@ const MessageWrapper = styled.div`
 `;
 
 const Title = styled.h3`
-  font-size: 2rem;
+  font-size: 1.5vmax;
   font-weight: 600;
 `;
 
 const Message = styled.h4`
-  font-size: 1.5rem;
+  font-size: 1vmax;
   font-weight: 400;
   span {
     font-weight: 600;
@@ -69,7 +69,7 @@ const BtnWrapper = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: center;
-  font-size: 1.5rem;
+  font-size: 1vmax;
   font-weight: 400;
 `;
 
@@ -96,7 +96,9 @@ const CancelBtn = styled(Btn)`
   }
 `;
 
-function Modal({ type, cat, name="", action }: IModal) {
+function Modal({ type, cat, name = "", action }: IModal) {
+  console.log(`Modal, ${type}, ${cat}, ${name}`);
+
   return (
     <>
       <Overlay onClick={() => action(false)} />

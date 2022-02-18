@@ -5,7 +5,7 @@ import { ICard } from "./interface";
 import Modal from "./Modal";
 
 const Wrapper = styled.div`
-  font-size: 1.2rem;
+  font-size: 0.8vmax;
   font-weight: 600;
 `;
 
@@ -28,7 +28,7 @@ const DeleteBtn = styled.button`
   background-color: transparent;
   cursor: pointer;
   svg {
-    width: 1rem;
+    height: 0.8vmax;
     fill: #333;
   }
   svg:hover {
@@ -74,7 +74,7 @@ const CloseBtn = styled.button.attrs({ type: "reset" })`
   background-color: transparent;
   cursor: pointer;
   svg {
-    width: 1rem;
+    height: 0.8vmax;
     fill: #333;
   }
   svg:hover {
@@ -83,6 +83,7 @@ const CloseBtn = styled.button.attrs({ type: "reset" })`
 `;
 
 function Card({id, text, editCard, deleteCard}: ICard & { editCard: (card: ICard) => void, deleteCard: (id: number) => void }) {
+  console.log(`Card, ${id}, ${text}`);
   const [form, setForm] = useState("");
   const [isEdit, setIsEdit] = useState(false);
   const [openModal, setOpenModal] = useState(false);
@@ -103,10 +104,6 @@ function Card({id, text, editCard, deleteCard}: ICard & { editCard: (card: ICard
     editCard({ id: id, text: form });
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setForm(e.target.value);
-  };
-
   const handleDelete = (confirm: boolean) => {
     setOpenModal(false);
     if (!confirm) return;
@@ -117,9 +114,16 @@ function Card({id, text, editCard, deleteCard}: ICard & { editCard: (card: ICard
     <Wrapper>
       {isEdit ? (
         <TextForm onSubmit={handleEdit}>
-          <Input onChange={handleChange} value={form} onFocus={e => e.currentTarget.select()} />
+          <Input
+            value={form}
+            onChange={e => setForm(e.target.value)}
+            onFocus={e => e.currentTarget.select()}
+            onBlur={() => setIsEdit(false)}
+          />
           <BtnWrapper>
-            <EditBtn>Edit</EditBtn>
+            <EditBtn onMouseDown={e => e.preventDefault()}>
+              Edit
+            </EditBtn>
             <CloseBtn onClick={() => setIsEdit(false)}>
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000">
                 <path d="M638.6,500l322.7-322.7c38.3-38.3,38.3-100.3,0-138.6C923,0.4,861,0.4,822.7,38.7L500,361.4L177.3,38.7C139,0.4,77,0.4,38.7,38.7C0.4,77,0.4,139,38.7,177.3L361.4,500L38.7,822.7C0.4,861,0.4,923,38.7,961.3C57.9,980.4,82.9,990,108,990s50.1-9.6,69.3-28.7L500,638.6l322.7,322.7c19.1,19.1,44.2,28.7,69.3,28.7c25.1,0,50.1-9.6,69.3-28.7c38.3-38.3,38.3-100.3,0-138.6L638.6,500z" />
