@@ -28,22 +28,50 @@ const Header = styled.div`
   font-weight: 600;
 `;
 
-const SelectBox = styled.select`
+const SelectWrapper = styled.div`
   max-width: 50vw;
-  border-radius: 0.2vmax;
+  display: inline-flex;
+  flex-direction: column;
+`;
+
+const Select = styled.div`
+  background-color: #fff4;
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5vmax;
   box-shadow: 0 2px 3px #0002, 0 10px 20px #0001;
-  padding: 0.4vmax 1.6vmax 0.4vmax 0.8vmax;
+  border-radius: 0.2vmax;
+  padding: 0.4vmax;
+  padding-left: 0.8vmax;
   cursor: pointer;
   &:hover {
     background-color: #fffb;
   }
-  -webkit-appearance: none;
-	-moz-appearance: none;
-	appearance: none;
-  background: #fff4 url('data:image/svg+xml;utf8,<svg viewBox="0 0 1280 640" width="15" xmlns="http://www.w3.org/2000/svg"><path d="M10 6392 c0 -4 1438 -1445 3195 -3202 l3195 -3194 3195 3194 c1757 1757 3195 3198 3195 3202 0 5 -2875 8 -6390 8 -3515 0 -6390 -3 -6390 -8z" transform="translate(0.000000,640.000000) scale(0.100000,-0.100000)" /></svg>') no-repeat;
-  background-position: right 0.6vw center;
-  option {
-    max-width: 50vw;
+  svg {
+    width: 0.7vmax;
+  }
+`;
+
+const OptionWrapper = styled.div`
+  height: 0;
+  box-shadow: 0 2px 3px #0002, 0 10px 20px #0001;
+  margin-top: 0.2vmax;
+  z-index: 1;
+`;
+
+const Option = styled.div<{ value: number }>`
+  background-color: #fff;
+  padding: 0.4vmax 0.8vmax;
+  cursor: pointer;
+  &:hover {
+    background-color: #09e;
+    color: #fff;
+  }
+  &:first-child {
+    border-radius: 0.2vmax 0.2vmax 0 0;
+  }
+  &:last-child {
+    border-radius: 0 0 0.2vmax 0.2vmax;
   }
 `;
 
@@ -135,6 +163,7 @@ function Main() {
   const [form, setForm] = useState("");
   const [isAdd, setIsAdd] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
+  const [openSelect, setOpenSelect] = useState(false);
   const [openModal, setOpenModal] = useState(false);
 
   const editBoard = (board: IBoard) => {
@@ -156,12 +185,14 @@ function Main() {
     setOpenModal(true);
   };
 
-  const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (e.target.value === "-1") {
+  const handleSelect = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    const value = parseInt(e.currentTarget.getAttribute("value")!);
+    if (value === -1) {
       clickAdd();
     } else {
-      setId(parseInt(e.target.value));
+      setId(value);
     }
+    setOpenSelect(false);
   };
 
   const handleAdd = (e: React.FormEvent<HTMLFormElement>) => {
@@ -191,19 +222,38 @@ function Main() {
   return (
     <Wrapper>
       <Header>
-        <SelectBox onChange={handleSelect} value="">
-          <option value="" disabled hidden>
+        <SelectWrapper
+          tabIndex={0}
+          onBlur={() => setOpenSelect(false)}
+        >
+          <Select onClick={() => setOpenSelect(v => !v)}>
             Board
-          </option>
-          <option value="-1">
-            + New
-          </option>
-          {boards.map((v) => (
-            <option key={v.id} value={v.id}>
-              {v.name}
-            </option>
-          ))}
-        </SelectBox>
+            <svg
+              xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 640"
+            >
+              <path d="M10 6392 c0 -4 1438 -1445 3195 -3202 l3195 -3194 3195 3194 c1757 1757 3195 3198 3195 3202 0 5 -2875 8 -6390 8 -3515 0 -6390 -3 -6390 -8z" transform="translate(0.000000,640.000000) scale(0.100000,-0.100000)" />
+            </svg>
+          </Select>
+          <OptionWrapper
+            style={openSelect ? { visibility: "visible" } : { visibility: "hidden", height: 0 }}
+          >
+              <Option
+                value={-1}
+                onClick={handleSelect}
+              >
+                + New
+              </Option>
+            {boards.map(v => (
+              <Option
+                key={v.id}
+                value={v.id}
+                onClick={handleSelect}
+              >
+                {v.name}
+              </Option>
+            ))}
+          </OptionWrapper>
+        </SelectWrapper>
         {isAdd ? (
           <TitleForm onSubmit={handleAdd}>
             <Input

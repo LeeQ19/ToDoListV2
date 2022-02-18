@@ -75,7 +75,6 @@ const CloseBtn = styled.button.attrs({ type: "reset" })`
 `;
 
 function AddCard({ addCard }: { addCard: (text: string) => void }) {
-  console.log(`AddCard`);
   const [isActivate, setIsActivate] = useState(false);
   const [form, setForm] = useState("");
 
@@ -92,7 +91,7 @@ function AddCard({ addCard }: { addCard: (text: string) => void }) {
       {isActivate ? (
         <Activated onSubmit={handleSubmit}>
           <Input
-            onChange={e => setForm(e.target.value)}
+            onChange={e => setForm(e.currentTarget.value)}
             onBlur={() => setIsActivate(false)}
           />
           <BtnWrapper>

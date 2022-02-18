@@ -97,7 +97,6 @@ const CancelBtn = styled(Btn)`
 `;
 
 function Modal({ type, cat, name = "", action }: IModal) {
-  console.log(`Modal, ${type}, ${cat}, ${name}`);
 
   return (
     <>

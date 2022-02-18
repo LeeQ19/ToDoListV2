@@ -83,7 +83,6 @@ const CloseBtn = styled.button.attrs({ type: "reset" })`
 `;
 
 function Card({id, text, editCard, deleteCard}: ICard & { editCard: (card: ICard) => void, deleteCard: (id: number) => void }) {
-  console.log(`Card, ${id}, ${text}`);
   const [form, setForm] = useState("");
   const [isEdit, setIsEdit] = useState(false);
   const [openModal, setOpenModal] = useState(false);
@@ -116,7 +115,7 @@ function Card({id, text, editCard, deleteCard}: ICard & { editCard: (card: ICard
         <TextForm onSubmit={handleEdit}>
           <Input
             value={form}
-            onChange={e => setForm(e.target.value)}
+            onChange={e => setForm(e.currentTarget.value)}
             onFocus={e => e.currentTarget.select()}
             onBlur={() => setIsEdit(false)}
           />

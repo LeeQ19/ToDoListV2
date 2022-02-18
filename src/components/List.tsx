@@ -100,7 +100,6 @@ const CloseBtn = styled.button.attrs({ type: "reset" })`
 `;
 
 function List({ id, name, cards, editList, deleteList }: IList & { editList: (list: IList) => void, deleteList: (id: number) => void }) {
-  console.log(`List, ${id}, ${name}, ${cards.length}`);
   const [currCards, setCurrCards] = useState(cards);
   const [form, setForm] = useState("");
   const [isEdit, setIsEdit] = useState(false);
@@ -152,7 +151,7 @@ function List({ id, name, cards, editList, deleteList }: IList & { editList: (li
         <TitleForm onSubmit={handleEdit}>
           <Input
             value={form}
-            onChange={e => setForm(e.target.value)}
+            onChange={e => setForm(e.currentTarget.value)}
             onFocus={e => e.currentTarget.select()}
             onBlur={() => setIsEdit(false)}
           />
