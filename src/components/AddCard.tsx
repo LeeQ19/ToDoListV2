@@ -1,9 +1,9 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
   border-radius: 0.2vmax;
-  font-size: 0.8vmax;
+  font-size: max(0.8vmax, 16px);
   font-weight: 600;
 `;
 
@@ -16,7 +16,7 @@ const Deactivated = styled.div`
   padding: 0.4vmax 0.8vmax;
   cursor: pointer;
   svg {
-    height: 0.7vmax;
+    height: max(0.6vmax, 12px);
     fill: #333;
   }
   &:hover {
@@ -66,7 +66,7 @@ const CloseBtn = styled.button.attrs({ type: "reset" })`
   background-color: transparent;
   cursor: pointer;
   svg {
-    height: 0.8vmax;
+    height: max(0.8vmax, 16px);
     fill: #333;
   }
   svg:hover {
@@ -83,7 +83,16 @@ function AddCard({ addCard }: { addCard: (text: string) => void }) {
     setIsActivate(false);
     if (form === "") return;
     addCard(form);
-    setForm("");
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      setIsActivate(false);
+      if (form === "") return;
+      addCard(form);
+    } else if (e.key === "Escape") {
+      setIsActivate(false)
+    }
   };
 
   return (
@@ -93,6 +102,7 @@ function AddCard({ addCard }: { addCard: (text: string) => void }) {
           <Input
             onChange={e => setForm(e.currentTarget.value)}
             onBlur={() => setIsActivate(false)}
+            onKeyDown={handleKeyDown}
           />
           <BtnWrapper>
             <AddBtn onMouseDown={e => e.preventDefault()}>
@@ -117,4 +127,4 @@ function AddCard({ addCard }: { addCard: (text: string) => void }) {
   );
 }
 
-export default AddCard;
+export default React.memo(AddCard);

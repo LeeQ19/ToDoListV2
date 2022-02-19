@@ -5,7 +5,7 @@ import { ICard } from "./interface";
 import Modal from "./Modal";
 
 const Wrapper = styled.div`
-  font-size: 0.8vmax;
+  font-size: max(0.8vmax, 16px);
   font-weight: 600;
 `;
 
@@ -28,7 +28,7 @@ const DeleteBtn = styled.button`
   background-color: transparent;
   cursor: pointer;
   svg {
-    height: 0.8vmax;
+    height: max(0.8vmax, 16px);
     fill: #333;
   }
   svg:hover {
@@ -74,7 +74,7 @@ const CloseBtn = styled.button.attrs({ type: "reset" })`
   background-color: transparent;
   cursor: pointer;
   svg {
-    height: 0.8vmax;
+    height: max(0.8vmax, 16px);
     fill: #333;
   }
   svg:hover {
@@ -103,6 +103,16 @@ function Card({id, text, editCard, deleteCard}: ICard & { editCard: (card: ICard
     editCard({ id: id, text: form });
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      setIsEdit(false);
+      if (form === "") return;
+      editCard({ id: id, text: form });
+    } else if (e.key === "Escape") {
+      setIsEdit(false)
+    }
+  };
+
   const handleDelete = (confirm: boolean) => {
     setOpenModal(false);
     if (!confirm) return;
@@ -118,6 +128,7 @@ function Card({id, text, editCard, deleteCard}: ICard & { editCard: (card: ICard
             onChange={e => setForm(e.currentTarget.value)}
             onFocus={e => e.currentTarget.select()}
             onBlur={() => setIsEdit(false)}
+            onKeyDown={handleKeyDown}
           />
           <BtnWrapper>
             <EditBtn onMouseDown={e => e.preventDefault()}>
@@ -156,4 +167,4 @@ function Card({id, text, editCard, deleteCard}: ICard & { editCard: (card: ICard
   );
 }
 
-export default Card;
+export default React.memo(Card);

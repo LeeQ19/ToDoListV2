@@ -8,7 +8,7 @@ const Wrapper = styled.div`
   background-color: #fff4;
   box-shadow: 0 2px 3px #0002, 0 10px 20px #0001;
   border-radius: 0.2vmax;
-  font-size: 1vmax;
+  font-size: max(1vmax, 20px);
   font-weight: 600;
   padding: 0.6vmax;
 `;
@@ -20,7 +20,7 @@ const Deactivated = styled.div`
   gap: 0.4vmax;
   cursor: pointer;
   svg {
-    height: 0.8vmax;
+    height: max(0.8vmax, 16px);
     fill: #333;
   }
   &:hover {
@@ -72,7 +72,7 @@ const CloseBtn = styled.button.attrs({ type: "reset" })`
   background-color: transparent;
   cursor: pointer;
   svg {
-    height: 1vmax;
+    height: max(1vmax, 20px);
     fill: #333;
   }
   svg:hover {
@@ -99,6 +99,7 @@ function AddList({ addList }: { addList: (name: string) => void }) {
           <Input
             onChange={e => setForm(e.currentTarget.value)}
             onBlur={() => setIsActivate(false)}
+            onKeyDown={e => e.key === "Escape" && setIsActivate(false)}
           />
           <BtnWrapper>
             <AddBtn onMouseDown={e => e.preventDefault()}>
@@ -125,4 +126,4 @@ function AddList({ addList }: { addList: (name: string) => void }) {
   );
 }
 
-export default AddList;
+export default React.memo(AddList);

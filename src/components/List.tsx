@@ -17,14 +17,14 @@ const Wrapper = styled.div`
   gap: 0.6vmax;
   border-radius: 0.2vmax;
   padding: 0.6vmax;
+  font-size: max(1vmax, 20px);
+  font-weight: 600;
 `;
 
 const TitleWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  font-size: 1vmax;
-  font-weight: 600;
   gap: 1vmax;
 `;
 
@@ -41,7 +41,7 @@ const DeleteBtn = styled.button`
   margin-top: 0.4vmax;
   cursor: pointer;
   svg {
-    height: 1vmax;
+    height: max(1vmax, 20px);
     fill: #333;
   }
   svg:hover {
@@ -53,8 +53,6 @@ const TitleForm = styled.form`
   display: flex;
   align-items: center;
   gap: 0.6vmax;
-  font-size: 1vmax;
-  font-weight: 600;
 `;
 
 const Input = styled.input.attrs({
@@ -91,7 +89,7 @@ const CloseBtn = styled.button.attrs({ type: "reset" })`
   background-color: transparent;
   cursor: pointer;
   svg {
-    height: 1vmax;
+    height: max(1vmax, 20px);
     fill: #333;
   }
   svg:hover {
@@ -104,6 +102,10 @@ function List({ id, name, cards, editList, deleteList }: IList & { editList: (li
   const [form, setForm] = useState("");
   const [isEdit, setIsEdit] = useState(false);
   const [openModal, setOpenModal] = useState(false);
+
+  useEffect(() => {
+    setCurrCards(cards);
+  }, [id]);
 
   useEffect(() => {
     if (cards !== currCards) {
@@ -120,7 +122,7 @@ function List({ id, name, cards, editList, deleteList }: IList & { editList: (li
   };
 
   const deleteCard = (id: number) => {
-    setCurrCards(v => v.filter(w => w.id !== id));
+    setCurrCards(v => [...v.slice(0, id), ...v.slice(id + 1).map(w => ({ id: w.id - 1, text: w.text }))]);
   };
 
   const clickTitle = () => {
@@ -154,6 +156,7 @@ function List({ id, name, cards, editList, deleteList }: IList & { editList: (li
             onChange={e => setForm(e.currentTarget.value)}
             onFocus={e => e.currentTarget.select()}
             onBlur={() => setIsEdit(false)}
+            onKeyDown={e => e.key === "Escape" && setIsEdit(false)}
           />
           <BtnWrapper>
             <EditBtn onMouseDown={e => e.preventDefault()}>
@@ -203,4 +206,4 @@ function List({ id, name, cards, editList, deleteList }: IList & { editList: (li
   );
 }
 
-export default List;
+export default React.memo(List);

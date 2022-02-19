@@ -24,7 +24,7 @@ const Header = styled.div`
   justify-content: flex-start;
   align-items: flex-start;
   gap: 1vmax;
-  font-size: 1.2vmax;
+  font-size: max(1.2vmax, 24px);
   font-weight: 600;
 `;
 
@@ -48,7 +48,7 @@ const Select = styled.div`
     background-color: #fffb;
   }
   svg {
-    width: 0.7vmax;
+    width: max(0.7vmax, 14px);;
   }
 `;
 
@@ -101,7 +101,7 @@ const DeleteBtn = styled.button`
   padding: 0.4vmax 0;
   cursor: pointer;
   svg {
-    height: 1.2vmax;
+    height: max(1.2vmax, 24px);
     fill: #333;
   }
   svg:hover {
@@ -149,7 +149,7 @@ const CloseBtn = styled.button.attrs({ type: "reset" })`
   background-color: transparent;
   cursor: pointer;
   svg {
-    height: 1.2vmax;
+    height: max(1.2vmax, 24px);
     fill: #333;
   }
   svg:hover {
@@ -216,15 +216,16 @@ function Main() {
     if (!confirm) return;
     const prevId = id;
     setId(v => v < boards.length - 1 ? v : v - 1);
-    setBoards(v => v.filter(w => w.id !== prevId));
+    setBoards(v => [...v.slice(0, prevId), ...v.slice(prevId + 1).map(w => ({ id: w.id - 1, name: w.name, lists: w.lists }))]);
   };
 
   return (
     <Wrapper>
       <Header>
         <SelectWrapper
-          tabIndex={0}
+          tabIndex={-1}
           onBlur={() => setOpenSelect(false)}
+          onKeyDown={e => e.key === "Escape" && setOpenSelect(false)}
         >
           <Select onClick={() => setOpenSelect(v => !v)}>
             Board
@@ -258,9 +259,10 @@ function Main() {
           <TitleForm onSubmit={handleAdd}>
             <Input
               value={form}
-              size={form.length + 1}
+              size={form.length + 7}
               onChange={e => setForm(e.target.value)}
               onBlur={() => setIsAdd(false)}
+              onKeyDown={e => e.key === "Escape" && setIsAdd(false)}
             />
             <BtnWrapper>
               <EditBtn
@@ -279,10 +281,11 @@ function Main() {
           <TitleForm onSubmit={handleEdit}>
             <Input
               value={form}
-              size={form.length + 1}
+              size={form.length + 7}
               onChange={e => setForm(e.target.value)}
               onFocus={e => e.currentTarget.select()}
               onBlur={() => setIsEdit(false)}
+              onKeyDown={e => e.key === "Escape" && setIsEdit(false)}
             />
             <BtnWrapper>
               <EditBtn

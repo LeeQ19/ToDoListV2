@@ -31,16 +31,16 @@ const Wrapper = styled.div`
 `;
 
 const IconWrapper = styled.div`
-  width: 4vmax;
-  height: 4vmax;
+  width: max(4vmax, 80px);
+  height: max(4vmax, 80px);
   border-radius: 50%;
   background-color: #bbb;
   display: flex;
   justify-content: center;
   align-items: center;
   svg {
-    width: 3vmax;
-    height: 3vmax;
+    width: max(3vmax, 60px);
+    height: max(3vmax, 60px);
   }
 `;
 
@@ -52,12 +52,12 @@ const MessageWrapper = styled.div`
 `;
 
 const Title = styled.h3`
-  font-size: 1.5vmax;
+  font-size: max(1.5vmax, 30px);
   font-weight: 600;
 `;
 
 const Message = styled.h4`
-  font-size: 1vmax;
+  font-size: max(1vmax, 20px);
   font-weight: 400;
   span {
     font-weight: 600;
@@ -69,7 +69,7 @@ const BtnWrapper = styled.div`
   display: flex;
   justify-content: space-around;
   align-items: center;
-  font-size: 1vmax;
+  font-size: max(1vmax, 20px);
   font-weight: 400;
 `;
 
@@ -80,7 +80,9 @@ const Btn = styled.button`
   cursor: pointer;
 `;
 
-const ConfirmBtn = styled(Btn)`
+const ConfirmBtn = styled(Btn).attrs({
+  autoFocus: true
+})`
   background-color: #09e8;
   color: #fff;
   &:hover {
@@ -97,11 +99,13 @@ const CancelBtn = styled(Btn)`
 `;
 
 function Modal({ type, cat, name = "", action }: IModal) {
-
   return (
     <>
       <Overlay onClick={() => action(false)} />
-      <Wrapper>
+      <Wrapper
+        tabIndex={-1}
+        onKeyDown={e => e.key === "Enter" ? action(true) : e.key === "Escape" && action(false)}
+      >
         <IconWrapper>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 430 512">
             <g transform="translate(0.000000,512.000000) scale(0.100000,-0.100000)">

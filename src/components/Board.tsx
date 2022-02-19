@@ -13,8 +13,12 @@ const Wrapper = styled.div`
   gap: 1vmax;
 `;
 
-function Board({ id, name, lists, editBoard }: IBoard & { editBoard: (board: IBoard)=> void }) {
+function Board({ id, name, lists, editBoard }: IBoard & { editBoard: (board: IBoard) => void }) {
   const [currLists, setCurrLists] = useState(lists);
+
+  useEffect(() => {
+    setCurrLists(lists);
+  }, [id]);
 
   useEffect(() => {
     if (lists !== currLists) {
@@ -31,7 +35,7 @@ function Board({ id, name, lists, editBoard }: IBoard & { editBoard: (board: IBo
   };
 
   const deleteList = (id: number) => {
-    setCurrLists(v => v.filter(w => w.id !== id));
+    setCurrLists(v => [...v.slice(0, id), ...v.slice(id + 1).map(w => ({ id: w.id - 1, name: w.name, cards: w.cards }))]);
   };
 
   return (
@@ -51,4 +55,4 @@ function Board({ id, name, lists, editBoard }: IBoard & { editBoard: (board: IBo
   );
 }
 
-export default Board;
+export default React.memo(Board);
