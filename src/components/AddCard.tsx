@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
@@ -78,20 +78,20 @@ function AddCard({ addCard }: { addCard: (text: string) => void }) {
   const [isActivate, setIsActivate] = useState(false);
   const [form, setForm] = useState("");
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = (e?: React.FormEvent<HTMLFormElement>) => {
+    e?.preventDefault();
     setIsActivate(false);
     if (form === "") return;
     addCard(form);
+    setForm("");
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
-      setIsActivate(false);
-      if (form === "") return;
-      addCard(form);
+      handleSubmit();
     } else if (e.key === "Escape") {
       setIsActivate(false)
+      setForm("");
     }
   };
 

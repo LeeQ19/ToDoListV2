@@ -96,8 +96,8 @@ function Card({id, text, editCard, deleteCard}: ICard & { editCard: (card: ICard
     setOpenModal(true);
   };
 
-  const handleEdit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = (e?: React.FormEvent<HTMLFormElement>) => {
+    e?.preventDefault();
     setIsEdit(false);
     if (form === "") return;
     editCard({ id: id, text: form });
@@ -105,9 +105,7 @@ function Card({id, text, editCard, deleteCard}: ICard & { editCard: (card: ICard
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
-      setIsEdit(false);
-      if (form === "") return;
-      editCard({ id: id, text: form });
+      handleSubmit();
     } else if (e.key === "Escape") {
       setIsEdit(false)
     }
@@ -122,7 +120,7 @@ function Card({id, text, editCard, deleteCard}: ICard & { editCard: (card: ICard
   return (
     <Wrapper>
       {isEdit ? (
-        <TextForm onSubmit={handleEdit}>
+        <TextForm onSubmit={handleSubmit}>
           <Input
             value={form}
             onChange={e => setForm(e.currentTarget.value)}

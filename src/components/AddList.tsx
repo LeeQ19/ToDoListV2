@@ -92,6 +92,13 @@ function AddList({ addList }: { addList: (name: string) => void }) {
     setForm("");
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Escape") {
+      setIsActivate(false)
+      setForm("");
+    }
+  };
+
   return (
     <Wrapper>
       {isActivate ? (
@@ -99,7 +106,7 @@ function AddList({ addList }: { addList: (name: string) => void }) {
           <Input
             onChange={e => setForm(e.currentTarget.value)}
             onBlur={() => setIsActivate(false)}
-            onKeyDown={e => e.key === "Escape" && setIsActivate(false)}
+            onKeyDown={handleKeyDown}
           />
           <BtnWrapper>
             <AddBtn onMouseDown={e => e.preventDefault()}>

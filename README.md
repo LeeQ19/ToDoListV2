@@ -10,4 +10,5 @@
 + TypeScript
 + React
 + Recoil
++ Recoil Persist
 + React Hook Form

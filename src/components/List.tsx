@@ -29,7 +29,7 @@ const TitleWrapper = styled.div`
 `;
 
 const Title = styled.h3`
-  max-height: 2.5vw;
+  max-height: max(2.2vmax, 44px);
   word-wrap: break-word;
   overflow: hidden;
   padding: 0.4vmax 0;
@@ -134,7 +134,7 @@ function List({ id, name, cards, editList, deleteList }: IList & { editList: (li
     setOpenModal(true);
   };
 
-  const handleEdit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsEdit(false);
     if (form === "") return;
@@ -146,17 +146,23 @@ function List({ id, name, cards, editList, deleteList }: IList & { editList: (li
     if (!confirm) return;
     deleteList(id);
   };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Escape") {
+      setIsEdit(false)
+    }
+  };
   
   return (
     <Wrapper>
       {isEdit ? (
-        <TitleForm onSubmit={handleEdit}>
+        <TitleForm onSubmit={handleSubmit}>
           <Input
             value={form}
             onChange={e => setForm(e.currentTarget.value)}
             onFocus={e => e.currentTarget.select()}
             onBlur={() => setIsEdit(false)}
-            onKeyDown={e => e.key === "Escape" && setIsEdit(false)}
+            onKeyDown={handleKeyDown}
           />
           <BtnWrapper>
             <EditBtn onMouseDown={e => e.preventDefault()}>

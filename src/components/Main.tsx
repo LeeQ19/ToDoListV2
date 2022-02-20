@@ -83,7 +83,7 @@ const TitleWrapper = styled.div`
 
 const TitleBox = styled.div`
   max-width: 40vw;
-  max-height: 3vw;
+  max-height: max(2.6vmax, 52px);
   background-color: #fff4;
   box-shadow: 0 2px 3px #0002, 0 10px 20px #0001;
   border-radius: 0.2vmax;
@@ -181,7 +181,6 @@ function Main() {
   };
 
   const clickDelete = () => {
-    if (boards.length === 1) return;
     setOpenModal(true);
   };
 
@@ -277,7 +276,7 @@ function Main() {
               </CloseBtn>
             </BtnWrapper>
           </TitleForm>
-        ) : (isEdit ? (
+        ) : isEdit ? (
           <TitleForm onSubmit={handleEdit}>
             <Input
               value={form}
@@ -314,7 +313,7 @@ function Main() {
               </svg>
             </DeleteBtn>
           </TitleWrapper>
-        ))}
+        )}
       </Header>
       {!isAdd &&
         <Board
@@ -326,10 +325,10 @@ function Main() {
       }
       {openModal && (
         <Modal
-          type="delete"
+          type={boards.length === 1 ? "warning" : "delete"}
           cat="Board"
           name={boards[id].name}
-          action={handleDelete}
+          action={boards.length === 1 ? () => setOpenModal(false) : handleDelete}
         />
       )}
     </Wrapper>
