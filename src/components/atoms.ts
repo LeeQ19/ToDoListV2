@@ -14,7 +14,7 @@ export const boardsState = atom<IBoard[]>({
       {
         id: 0,
         name: "To Do",
-        cards: [{id: 0, text: "first to do"}]
+        cards: [{id: 0, text: "first thing to do"}]
       },
       {
         id: 1,

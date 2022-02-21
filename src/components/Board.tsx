@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { Droppable } from 'react-beautiful-dnd';
 
 import { IBoard, IList } from "./interface";
 import List from "./List";
@@ -26,12 +27,12 @@ function Board({ id, name, lists, editBoard }: IBoard & { editBoard: (board: IBo
     }
   }, [currLists]);
 
-  const editList = (list: IList) => {
-    setCurrLists(v => v.map(w => w.id === list.id ? list : w));
-  };
-
   const addList = (name: string) => {
     setCurrLists(v => [...v, { id: v.length, name: name, cards: [] }]);
+  };
+
+  const editList = (list: IList) => {
+    setCurrLists(v => v.map(w => w.id === list.id ? list : w));
   };
 
   const deleteList = (id: number) => {
@@ -39,19 +40,31 @@ function Board({ id, name, lists, editBoard }: IBoard & { editBoard: (board: IBo
   };
 
   return (
-    <Wrapper>
-      {lists.map(v => (
-        <List
-          key={v.id}
-          id={v.id}
-          name={v.name}
-          cards={v.cards}
-          editList={editList}
-          deleteList={deleteList}
-        />
-      ))}
-      <AddList addList={addList} />
-    </Wrapper>
+    <Droppable
+      droppableId="board"
+      type="list"
+      direction="horizontal"
+    >
+      {(provided, snapshot) => (
+        <Wrapper
+          ref={provided.innerRef}
+          {...provided.droppableProps}
+        >
+          {lists.map(v => (
+            <List
+              key={v.id}
+              id={v.id}
+              name={v.name}
+              cards={v.cards}
+              editList={editList}
+              deleteList={deleteList}
+            />
+          ))}
+          {provided.placeholder}
+          <AddList addList={addList} />
+        </Wrapper>
+      )}
+    </Droppable>
   );
 }
 
